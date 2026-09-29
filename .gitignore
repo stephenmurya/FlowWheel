@@ -1,0 +1,41 @@
+# .NET build output
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userprefs
+
+# Generated publish/install artifacts (release assets are uploaded separately)
+/artifacts/
+/work/
+
+# Visual Studio / Rider / VS Code metadata
+.vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Local FlowWheel preferences and diagnostics
+options.json
+*.log
+*.dmp
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Signing and local secrets
+*.pfx
+*.snk
+.env
+.env.*
+!.env.example
