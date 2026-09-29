@@ -87,7 +87,7 @@ internal static class FlowWheelInstaller
             if (key != null)
             {
                 key.SetValue("DisplayName", Product);
-                key.SetValue("DisplayVersion", "1.0.0");
+                key.SetValue("DisplayVersion", "2.0.0");
                 key.SetValue("Publisher", Product);
                 key.SetValue("InstallLocation", target);
                 key.SetValue("UninstallString", "\"" + setupPath + "\" --uninstall");

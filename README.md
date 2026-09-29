@@ -2,7 +2,7 @@
 
 FlowWheel is an independent Windows tray utility that applies eased, configurable mouse-wheel scrolling across desktop applications. It runs quietly in the notification area and keeps the original wheel input available when smoothing is disabled, an application is excluded, or the input engine cannot safely inject output.
 
-This document describes the current **FlowWheel 1.0.0 .NET implementation**. A native C++ implementation is planned separately; it is not part of this release.
+The current **FlowWheel 2.0.0** implementation is a native C++20/Win32 application. Its portable executable is roughly 125 KB and has no bundled runtime. The original self-contained .NET 1.0.0 release remains available from the GitHub releases page.
 
 ## What it does
 
@@ -11,7 +11,7 @@ This document describes the current **FlowWheel 1.0.0 .NET implementation**. A n
 - Provides Natural, Gentle, and Fast presets, plus a **Reset defaults** action.
 - Lets you toggle FlowWheel globally from the tray and add a per-application exclusion for the foreground app. Excluded apps receive native pass-through scrolling.
 - Detects a conservative set of game executables and pauses smoothing in those games by default. A game can be explicitly allowed through the game-bypass exceptions setting.
-- Stores settings as readable JSON and can launch at Windows sign-in.
+- Stores settings in a readable INI file and can launch at Windows sign-in.
 - Installs per-user, without requiring administrator approval.
 
 ## Requirements
@@ -19,24 +19,23 @@ This document describes the current **FlowWheel 1.0.0 .NET implementation**. A n
 ### Running the published build
 
 - Windows 10 or Windows 11, x64.
-- No separate .NET installation is required for the self-contained x64 build.
+- No separate runtime installation is required.
 - An unsigned build may produce a Windows SmartScreen warning on first launch.
 
 The current build is a desktop input utility. Windows security boundaries such as User Interface Privilege Isolation (UIPI) can prevent it from injecting scroll events into an elevated application. When injection fails, FlowWheel fails open and lets physical scrolling pass through.
 
 ### Building from source
 
-- Windows with the .NET 8 SDK installed.
-- PowerShell.
-- The installer build additionally uses the .NET Framework `csc.exe` that ships with Windows/.NET Framework developer tooling.
+- Windows, PowerShell, CMake, and Visual Studio C++ build tools.
+- The installer wrapper additionally uses the .NET Framework `csc.exe` included with Visual Studio/Windows developer tooling. The installed application itself is native and does not require .NET.
 
 ## Install or run
 
 The GitHub release provides these generated artifacts (local builds use the same paths):
 
 ```text
-artifacts\installer\FlowWheel-Setup.exe   # per-user installer
-artifacts\win-x64\FlowWheel.exe          # portable self-contained executable
+artifacts\native\FlowWheel-Setup.exe   # per-user installer
+artifacts\native\FlowWheel.exe         # portable native executable
 ```
 
 Run the setup executable for the normal installation. The custom bootstrapper installs the application to:
@@ -52,29 +51,20 @@ It creates a Start Menu shortcut, registers a per-user uninstall entry, and offe
 From the repository root:
 
 ```powershell
-.\scripts\verify.ps1
-.\scripts\build.ps1
+.\scripts\build-native.ps1 -Installer
 ```
 
-The portable publish is written to `artifacts\win-x64\FlowWheel.exe`. To also create the installer:
-
-```powershell
-.\scripts\build.ps1 -Installer
-```
-
-The installer is written to `artifacts\installer\FlowWheel-Setup.exe`. The `-Runtime` parameter also accepts `win-arm64` for a self-contained ARM64 publish; the installer script is primarily intended for the x64 artifact.
-
-The build uses a .NET 8 Windows Forms tray host and a separate `FlowWheel.Core` input engine. It publishes a self-contained, compressed, single-file executable, so the executable is larger than a native C++ build because it contains the .NET runtime.
+The portable executable and installer are written to `artifacts\native`. The older `scripts\build.ps1` command remains available to reproduce the archived .NET 1.0.0 implementation.
 
 ## Settings and data
 
 Preferences are saved at:
 
 ```text
-%APPDATA%\FlowWheel\options.json
+%LOCALAPPDATA%\FlowWheel\settings.ini
 ```
 
-The file is ordinary indented JSON. It is written through a temporary file replacement so a settings update does not normally leave a partially written file. FlowWheel does not collect application content, keystrokes, window text, or network telemetry.
+FlowWheel does not collect application content, keystrokes, window text, or network telemetry.
 
 The settings window exposes:
 
@@ -101,7 +91,7 @@ This is a heuristic, not a Windows-supported game-presence API. An undetected ga
 
 FlowWheel is an independent clean-room implementation. It does not link to, copy, patch, or depend on the expired SmoothScroll executable, DLLs, subscription checks, or proprietary assets. The product name, settings schema, tray UI, and implementation are FlowWheel's own.
 
-It aims to provide comparable user-facing scrolling behavior, not binary or source-level compatibility with SmoothScroll. No SmoothScroll source code is included in this repository. The planned native rewrite must preserve this independent implementation boundary.
+It aims to provide comparable user-facing scrolling behavior, not binary or source-level compatibility with SmoothScroll. No SmoothScroll source code is included in this repository. The native implementation preserves this independent implementation boundary.
 
 ## Known limitations
 
@@ -116,14 +106,15 @@ It aims to provide comparable user-facing scrolling behavior, not binary or sour
 ## Repository layout
 
 ```text
-src\FlowWheel.Core\       input hook, smoothing engine, policy, native interop
-ui\FlowWheel.UI\          tray process, settings window, startup registration
-installer\                 per-user installer source
-scripts\                   verification and publish scripts
+native\                    current C++20 input engine, tray UI, and settings
+src\FlowWheel.Core\       archived 1.0.0 .NET input engine
+ui\FlowWheel.UI\          archived 1.0.0 .NET tray UI
+installer\                 per-user installer wrapper source
+scripts\                   native and legacy build scripts
 docs\                      architecture and product notes
 artifacts\                 generated local publish/install outputs
 ```
 
 ## License and contribution note
 
-This repository is the project source for the independently implemented FlowWheel utility. Add the project's chosen license before distributing source outside the team. Do not submit proprietary SmoothScroll code, decompiled code, or license-bypass changes.
+This repository is the project source for the independently implemented FlowWheel utility. Do not submit proprietary SmoothScroll code, decompiled code, or license-bypass changes.

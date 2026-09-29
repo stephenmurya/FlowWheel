@@ -8,6 +8,7 @@
 # Generated publish/install artifacts (release assets are uploaded separately)
 /artifacts/
 /work/
+/native/build/
 
 # Visual Studio / Rider / VS Code metadata
 .vs/

@@ -2,6 +2,21 @@
 
 All notable changes to FlowWheel are documented here.
 
+## [2.0.0] - 2026-09-29
+
+### Changed
+
+- Reimplemented the shipping app in clean-room C++20 using direct Win32 APIs.
+- Reduced the portable executable from about 68 MB to about 125 KB.
+- Moved preferences to `%LOCALAPPDATA%\FlowWheel\settings.ini`.
+
+### Preserved
+
+- System-wide vertical and horizontal smoothing with failure-open input handling.
+- Explorer-compatible wheel output, easing, sensitivity, acceleration, and direction controls.
+- Tray toggles, foreground-app exclusions, game bypasses and opt-in exceptions.
+- Natural, Gentle, and Fast presets, Reset defaults, notifications, and launch at sign-in.
+
 ## [1.0.0] - 2026-09-29
 
 Initial FlowWheel release for Windows.
