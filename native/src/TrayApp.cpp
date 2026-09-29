@@ -225,8 +225,12 @@ void TrayApp::ToggleForegroundRule() {
         }
     } else if (it == snapshot.appRules.end()) {
         snapshot.appRules.push_back({foregroundPath_, false, false});
+    } else if (it->automaticGameRule) {
+        // Automatic detection may have been turned off after this exception
+        // was created. Convert it to the explicit exclusion requested now.
+        *it = {foregroundPath_, false, false};
     } else {
-        it->smooth = !it->smooth;
+        snapshot.appRules.erase(it);
     }
     settings_.Apply(snapshot); settings_.Save(); engine_.ApplySettings(snapshot);
     RefreshMenuState();

@@ -2,6 +2,12 @@
 
 All notable changes to FlowWheel are documented here.
 
+## [2.0.1] - 2026-09-29
+
+### Fixed
+
+- Correctly converts a saved game opt-in into an explicit exclusion when automatic game detection is later disabled.
+
 ## [2.0.0] - 2026-09-29
 
 ### Changed

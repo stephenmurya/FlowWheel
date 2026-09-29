@@ -2,7 +2,7 @@
 
 FlowWheel is an independent Windows tray utility that applies eased, configurable mouse-wheel scrolling across desktop applications. It runs quietly in the notification area and keeps the original wheel input available when smoothing is disabled, an application is excluded, or the input engine cannot safely inject output.
 
-The current **FlowWheel 2.0.0** implementation is a native C++20/Win32 application. Its portable executable is roughly 125 KB and has no bundled runtime. The original self-contained .NET 1.0.0 release remains available from the GitHub releases page.
+The current **FlowWheel 2.0.1** implementation is a native C++20/Win32 application. Its portable executable is roughly 125 KB and has no bundled runtime. The original self-contained .NET 1.0.0 release remains available from the GitHub releases page.
 
 ## What it does
 
